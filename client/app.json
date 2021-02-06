@@ -1,0 +1,19 @@
+{
+    "name": "JWT Authentication",
+    "publicPath": "/",
+    "buildDirectory": "dist",
+    "entry": "./index.js",
+    "htmlLocation": "./src/index.html",
+    "assetsFolder": "assets",
+    "scriptFolder": "js",
+    "cssFolder": "css",
+    "mediaFolder": "media",
+    "manifest": {
+        "generate": true,
+        "filename": "manifest.json"
+    },
+    "ignoreMoment": true,
+    "maxChunkSize": 300000,
+    "devtool": false,
+    "port": 3000
+}
