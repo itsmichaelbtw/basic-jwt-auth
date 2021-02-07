@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch, NavLink, Redirect } from "react-router-dom"
 
 import Home from "./pages/Home"
 import Login from "./pages/Login"
@@ -7,51 +7,83 @@ import Register from "./pages/Register"
 import PrivateRoute from "./pages/ProtectedRoute"
 
 import Menu from "antd/lib/menu"
+import Alert from "antd/lib/alert"
 
 import { ApplicationUseContext, ApplicationProvider } from "./context/state"
+import Api from './utils/api'
+
+const ProtectedRoute = (props) => {
+    const [state, dispatch] = ApplicationUseContext()
+
+    return (
+        <Route {...props.rest} render={({location}) => (
+            state.session.token ? (
+                props.children
+            ) : (
+                <Redirect to={{ pathname: "/login", state: { from: location }}} />
+            )
+        )} />
+    )
+}
 
 export default function App() {
-
+    const [isLoading, setLoading] = useState(true)
     const [state, dispatch] = ApplicationUseContext()
+
+    useEffect(() => {
+        (async function(){
+            try {
+                const Token = localStorage.getItem("session")
+
+                if (Token) {
+                    await Api.Validate(Token)
+
+                    dispatch({
+                        type: "SET_USER",
+                        payload: {
+                            token: Token
+                        }
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+            } 
+        })()
+    }, [])
 
     return (
         <Router>
             <div className="app-container">
-                <ApplicationProvider>
-                    <div className="navbar">
-                        <Menu theme="light" mode="horizontal" className="navbar-menu">
-                            <Menu.Item key="/">Home</Menu.Item>
-                            <Menu.Item key="/login">Login</Menu.Item>
-                            <Menu.Item key="/register">Register</Menu.Item>
-                            <Menu.Item key="/protected-route-one">Protected Route 1</Menu.Item>
-                            <Menu.Item key="/protected-route-two">Protected Route 2</Menu.Item>
-                        </Menu>
-                    </div>
+                <Alert message={`${state.session?.token ? "You are logged in" : "You are logged out"}`} type={`${state.session?.token ? "success" : "error"}`} banner/>
 
-                    <div className="wrap">
-                        <Switch>
-                            <Route to="/">
-                                <Home />
-                            </Route>
+                <div className="navbar">
+                    <Menu theme="light" mode="horizontal" className="navbar-menu" selectable={false}>
+                        <Menu.Item key="/"><NavLink to="/" activeStyle={{ color: "#1890FF"}} exact>Home</NavLink></Menu.Item>
+                        <Menu.Item key="/login"><NavLink to="/login" activeStyle={{ color: "#1890FF" }} exact>Login</NavLink></Menu.Item>
+                        <Menu.Item key="/register"><NavLink to="/register" activeStyle={{ color: "#1890FF" }} exact>Register</NavLink></Menu.Item>
+                        <Menu.Item key="/dashboard"><NavLink to="/dashboard" activeStyle={{ color: "#1890FF" }} exact>Dashboard</NavLink></Menu.Item>
+                    </Menu>
+                </div>
 
-                            <Route to="/login">
-                                <Login />
-                            </Route>
+                <div className="wrap">
+                    <Switch>
+                        <Route path="/" exact>
+                            <Home />
+                        </Route>
 
-                            <Route to="/register">
-                                <Register />
-                            </Route>
+                        <Route path="/login">
+                            <Login />
+                        </Route>
 
-                            <Route to="/protected-route-one">
-                                <PrivateRoute />
-                            </Route>
+                        <Route path="/register">
+                            <Register />
+                        </Route>
 
-                            <Route to="/protected-route-two">
-                                <PrivateRoute />
-                            </Route>
-                        </Switch>
-                    </div>
-                </ApplicationProvider>
+                        <ProtectedRoute path="/dashboard">
+                            <PrivateRoute />
+                        </ProtectedRoute>
+                    </Switch>
+                </div>
             </div>
         </Router>
 

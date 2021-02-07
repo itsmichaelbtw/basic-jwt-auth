@@ -1,10 +1,6 @@
 export const InitialState = {
-    contextFocused: undefined,
-    context: undefined,
-    isLoading: true,
     session: {
-        user: undefined,
-        token: undefined
+        token: "s"
     }
 }
 
@@ -19,36 +15,9 @@ export const Reducer = (state, action) => {
 
         case "REMOVE_USER": {
             return {
-                contextFocused: undefined,
-                context: undefined,
-                isLoading: true,
                 session: {
-                    user: undefined,
                     token: undefined
                 }
-            }
-        }
-
-        case "SET_CONTEXT": {
-            return {
-                ...state,
-                context: action.payload.context,
-                contextFocused: action.payload.contextFocused
-            }
-        }
-
-        case "FOCUSED_CONTEXT": {
-            return {
-                ...state,
-                contextFocused: action.payload.contextFocused,
-                isLoading: true
-            }
-        }
-
-        case "SET_LOADING": {
-            return {
-                ...state,
-                isLoading: action.payload.isLoading
             }
         }
 
