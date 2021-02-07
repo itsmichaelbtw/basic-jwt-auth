@@ -38,6 +38,8 @@ export default function Login() {
         }
     }
 
+    // redirect user to login page, no need to show login page if already logged in
+
     if (state.session.token) {
         return <Redirect to="/dashboard" />
     }

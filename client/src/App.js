@@ -12,6 +12,10 @@ import Alert from "antd/lib/alert"
 import { ApplicationUseContext, ApplicationProvider } from "./context/state"
 import Api from './utils/api'
 
+// this is where the state is checked to see if the user is authenticated
+// if they are => renders dashboard
+// if they are not => redirects to login
+
 const ProtectedRoute = (props) => {
     const [state, dispatch] = ApplicationUseContext()
 
@@ -29,6 +33,9 @@ const ProtectedRoute = (props) => {
 export default function App() {
     const [isLoading, setLoading] = useState(true)
     const [state, dispatch] = ApplicationUseContext()
+
+    // initial load of the website checks if a token persists in localstorage and verifies with server
+    // this only loads once per page refresh
 
     useEffect(() => {
         (async function(){

@@ -39,6 +39,8 @@ export default function Register() {
         }
     }
 
+    // redirect user to register page, no need to show register page if already logged in
+
     if (state.session.token) {
         return <Redirect to="/dashboard" />
     }
