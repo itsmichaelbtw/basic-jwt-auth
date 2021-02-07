@@ -14,7 +14,7 @@ export default function ProtectedRoute() {
     return (
         <div className="align">
             <Text style={{ fontSize: 16 }}>You are seeing this page because you are logged in</Text>
-            <Button type="primary" style={{ marginTop: 24 }} onClick={() => dispatch({type: "REMOVE_USER"})}>Logout</Button>
+            <Button type="primary" style={{ marginTop: 24 }} onClick={() => [dispatch({type: "REMOVE_USER"}), localStorage.clear()]}>Logout</Button>
         </div>
     )
 }

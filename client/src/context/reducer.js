@@ -1,6 +1,6 @@
 export const InitialState = {
     session: {
-        token: "s"
+        token: undefined
     }
 }
 

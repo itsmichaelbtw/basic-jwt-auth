@@ -1,5 +1,7 @@
 const axios = require("axios").default
 
+axios.defaults.baseURL = "http://localhost:5000"
+
 const Login = async function(credentials){
     try {
         const { data: LoginSession } = await axios.post("/api/user/login", credentials)

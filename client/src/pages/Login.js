@@ -24,7 +24,9 @@ export default function Login() {
         try {
             const ValidateUser = await Api.Login({ email: values.email, password: values.password })
 
-            localStorage.setItem("session", ValidateUser)
+            if (values.remember) {
+                localStorage.setItem("session", ValidateUser.token)
+            }
 
             dispatch({
                 type: "SET_USER",
@@ -34,7 +36,7 @@ export default function Login() {
             })
         } catch (error) {
             setLoading(false)
-            setError({ show: true, error: error.error })
+            setError({ show: true, msg: error.error })
         }
     }
 

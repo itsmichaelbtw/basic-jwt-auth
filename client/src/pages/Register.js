@@ -25,7 +25,9 @@ export default function Register() {
         try {
             const RegisterUser = await Api.Register(values)
 
-            localStorage.setItem("session", RegisterUser)
+            if (values.remember) {
+                localStorage.setItem("session", RegisterUser)
+            }
 
             dispatch({
                 type: "SET_USER",
@@ -35,7 +37,7 @@ export default function Register() {
             })
         } catch (error) {
             setLoading(false)
-            setError({ show: true, error: error.error })
+            setError({ show: true, msg: error.error })
         }
     }
 
